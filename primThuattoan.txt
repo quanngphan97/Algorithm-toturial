@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define V 6		//No of vertices
+
+int findmin(int key[],bool statePoint[])
+//int findmin(vector<int>& key,vector<bool>& statePoint)
+{
+    int minValue = INT_MAX;
+    int minIndex;
+    for(int i = 0 ; i < V ; i++ )
+    {
+        if(key[i] < minValue && statePoint[i] == false) {
+            minValue = key[i] ; 
+            minIndex = i;
+            cout << "quangphan" << minValue << " " << minIndex << endl;
+        }
+    }
+     cout << "hiihihi" << minIndex << endl;
+     return minIndex;      
+}
+void primMST(int graph[V][V]) {
+    int parent[V];
+    //vector<int> key(V,INT_MAX);	//Used for edge relaxation
+	//vector<bool> statePoint(V,false);	//TRUE->Vertex is included in MST
+    int key[V];
+    bool statePoint[V];
+    for(int i = 0 ; i < V ; i++) {
+        statePoint[i] = false;
+        key[i] = INT_MAX;
+    }
+    parent[0] = -1;
+    key[0] = 0;
+    
+    for(int count = 0 ; count < V-1;++count) {
+        int U = findmin(key,statePoint);
+        cout << "yeeyeyeyeye" << U << endl;
+        statePoint[U] = true;
+        for(int j = 0 ; j < V;++j) {
+            if(graph[U][j]!=0 && statePoint[j] == false && graph[U][j] < key[j])
+            {
+                key[j] = graph[U][j];
+                parent[j] = U;
+                cout << "AAAAAAAAAAA" << parent[j] << " " << j << " "  <<key[j] << endl;
+            }
+        }
+    }
+    for(int i=1;i<V;++i)
+		cout<<"U->V: "<<parent[i]<<"->"<<i<<"  wt = "<<graph[parent[i]][i]<<"\n";
+}
+int main()
+{
+int graph[V][V] = { {0, 4, 6, 0, 0, 0},
+						{4, 0, 6, 3, 4, 0},
+						{6, 6, 0, 1, 8, 0},
+						{0, 3, 1, 0, 2, 3},
+						{0, 4, 8, 2, 0, 7},
+						{0, 0, 0, 3, 7, 0} };
+
+    primMST(graph);	
+	return 0;
+}

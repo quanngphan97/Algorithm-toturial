@@ -1,0 +1,139 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define MAX 50+1
+
+int vertical;
+int horizontal;
+int arr[MAX][MAX];
+
+
+struct Position {
+	int x;
+	int y;
+};
+
+int row[] = {0,1,0,-1};
+int col[] = {-1,0,1,0};
+
+queue<Position> myqueue;
+queue<Position> myqueue1;
+
+void inputData()
+{
+	cin >> vertical >> horizontal;
+	for(int i = 0; i < vertical; i++) {
+		for(int j = 0; j < horizontal; j++) {
+			cin >> arr[i][j];
+		}
+	}
+}
+
+void findFirstElement()
+{
+	for(int i = 0; i < vertical; i++) {
+		for(int j = 0; j < horizontal; j++) {
+			if(arr[i][j] == 1) {
+				Position p;
+				p.x = i;
+				p.y = j;
+				arr[p.x][p.y] = 2;
+				myqueue.push(p);
+				return;
+			}
+		}
+	}
+}
+
+void BFS1() {
+	while(!myqueue.empty()) {
+		Position p = myqueue.front();
+		
+		myqueue1.push(p);
+		
+		myqueue.pop();
+	
+		for(int i = 0; i < 4; i++) {
+			int x = p.x + col[i];
+			int y = p.y + row[i];
+			if(x < 0 || x >= vertical) continue;
+			if(y < 0 || y >= horizontal) continue;
+			
+			if(arr[x][y] == 1) {
+			
+				Position p1;
+				
+				p1.x = x;
+				
+				p1.y = y;
+				
+				arr[p1.x][p1.y] = 2;
+				
+				myqueue.push(p1);
+				
+			}
+			
+		}
+		
+	}
+}
+
+int BFS2() {
+	
+	while(myqueue1.size() > 0)
+	{
+		Position p = myqueue1.front();
+		
+		myqueue1.pop();
+		
+		for(int i = 0; i < 4; i++) {
+			
+			int x = p.x + col[i];
+			int y = p.y + row[i];
+			
+			if(x < 0 || x > vertical) continue;
+			if(y < 0 || y > horizontal) continue;
+			
+			if(arr[x][y] == 1) {
+				
+				return arr[p.x][p.y] - 2;
+				
+			}  
+			
+			if(arr[x][y] == 0) {
+			
+				Position p1;
+				
+				p1.x = x;
+				
+				p1.y = y;
+				
+				arr[x][y] = arr[p.x][p.y] + 1;
+				
+				myqueue1.push(p1);
+				
+			}
+		}
+	}
+}
+
+void solution() 
+{
+	findFirstElement();
+
+	BFS1();
+	
+	int temp = BFS2();
+	
+	cout << temp << endl;
+}
+
+int main()
+{
+	inputData();	
+	solution();
+}

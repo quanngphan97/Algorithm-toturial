@@ -1,0 +1,68 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+#define MaxProduct  100001
+int Product;
+int typeProduct;
+int saveValue[10][MaxProduct];
+int maxCount[10];
+int order[10];
+bool visited[10];
+int ans = INT_MAX;
+
+void inputData()
+{
+	cin >> Product;
+	cin >> typeProduct;
+	for(int i = 1; i <= Product; i++) {
+		int temp;
+		cin >> temp;
+		for(int j = 1; j <= typeProduct; j++) {
+			saveValue[j][i] = saveValue[j][i -1];
+		}
+		saveValue[temp][i]++;	
+		maxCount[temp]++;
+	}
+}
+
+int calculator() 
+{
+	int ans = 0;
+	int postion = 0;
+	for(int i = 1; i <= typeProduct; i++) {
+		int num = order[i];
+		postion += maxCount[num];
+		ans += maxCount[num]  - (saveValue[num][postion] - saveValue[num][postion - maxCount[num]]);
+	}
+	return ans;
+}
+void findAnswer(int position)
+{
+	if(position > typeProduct) 
+	{
+		int temp = calculator();
+		if(ans > temp) 
+		{
+			ans = temp;
+		}		
+		return;
+	}
+
+	for(int i = 1; i <= typeProduct; i++)
+	{
+		if(!visited[i]) {
+			visited[i] = true;
+			order[position] = i;
+			findAnswer(position + 1);
+			visited[i] = false;
+		}
+	}	
+}
+
+int main()
+{
+	inputData();
+	findAnswer(1);
+	cout << ans << endl;
+}

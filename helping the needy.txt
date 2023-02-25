@@ -1,0 +1,67 @@
+#include <iostream>
+using namespace std;
+
+int N;//The number of goods to send 
+int C[10];//The number of BOXes(in order of 1, 5, 10, 50, 100, 500, 1000, 3000, 6000, 12000)
+int sol[10] = {};//The number of boxes to send
+int numberofGood[10] = {1,5,10,50,100,500,1000,3000,6000,12000};
+int valueofProduct[10] = {};
+
+void InputData(){
+	int i;
+	cin >> N;
+	for(i = 0; i < 10; i++){
+		cin >> C[i];
+	}
+}
+
+void calculator()
+{
+	int answer = 0;
+	int i = 0;
+	while(N >= numberofGood[i]) {
+		if(N > C[i]*numberofGood[i])
+		{
+			sol[i] = C[i];
+			N -= C[i]*numberofGood[i];
+			i++;
+		} else {
+			N -= numberofGood[i];
+			sol[i] += 1;
+		}
+	}
+	int j = i;
+	while(N != 0) {
+		if(sol[j-1] == 0) {
+				j--;
+		} else {
+				if(N < numberofGood[i]) {
+					N += numberofGood[j-1];
+					sol[j-1] = sol[j-1] - 1;
+				} else {
+					N -= numberofGood[i];
+					sol[i] += 1;
+					i-- ;
+					j = i;
+				}
+		}
+	}
+	
+	for(int m = 0; m < 10; m++) 
+	{
+		answer += sol[m];
+	}
+	cout << answer << endl;
+		for(int m = 0; m < 10; m++) 
+	{
+		cout << sol[m] << " ";
+	}
+	
+}
+
+int main(){
+	InputData();//	Input function
+	calculator();
+
+	return 0;
+}

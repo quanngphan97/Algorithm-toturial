@@ -1,0 +1,35 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+int N;//Number of sponsored goods
+int D[100000 + 10];//Preference
+
+void InputData(){
+	cin >> N;
+	for(int i=0;i<N;i++){
+		cin >> D[i];
+	}
+}
+
+void Solve()
+{
+	int ans = INT_MIN;
+	int sum = 0;
+	for(int i = 0; i < N;i++)
+	{
+		sum += D[i];
+		if(sum > ans)
+			ans = sum;
+		if(sum < 0)
+			sum = 0;
+	}
+	cout << ans << endl;
+}
+
+
+int main(){
+	InputData();//Input function
+	Solve();
+	return 0;
+}

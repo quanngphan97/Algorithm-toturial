@@ -1,0 +1,80 @@
+#include <iostream>
+#include <cstring>
+#include <bits/stdc++.h>
+using namespace std;
+
+int N;//the number of test cases
+int B;//number system
+char S[110];//first integer
+char D[110];//second integer
+char charToint[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+int convert(char para)
+{
+	if(para > '9') return int(para - 'A') + 10 ;
+	return int(para - '0');
+}
+
+void solution() {
+	cin >> B >> S >> D;
+	int sizeS = strlen(S);
+	int sizeD = strlen(D);
+	vector<int> arrS;
+	vector<int> arrD;
+	int sign = 1;
+	int paraS = 0;
+	int paraD = 0;
+	
+	if(S[paraS] == '0' || D[paraD] == '0') {
+		cout << '0' << endl;
+		return;
+	}
+	if(S[0] == '-') { sign *= -1; paraS++; }
+	if(D[0] == '-') { sign *= -1; paraD++; }
+	if(sign == -1) cout << "-";
+	for(int i = paraS; i < sizeS; i++)
+	{
+		arrS.push_back(convert(S[i]));
+	}
+	for(int i = paraD; i < sizeD; i++)
+	{
+		arrD.push_back(convert(D[i]));
+	}
+	
+	int sizeArrS = arrS.size();
+	int sizeArrD = arrD.size();
+	
+	int ans[sizeArrS + sizeArrD - 1] = { };
+	
+	for(int i = 0; i < sizeArrS; i++)
+	{
+		for(int j = 0; j < sizeArrD; j++)
+		{
+			ans[i+j] += arrS[i]*arrD[j];
+		}
+	}
+	
+	string s = "";
+	
+	int length =  sizeArrS + sizeArrD - 1;
+	
+	for(int i = length - 1; i > 0; i--)
+	{
+		int temp = ans[i] % B;
+		s = charToint[temp] + s;
+		ans[i-1] += ans[i]/B;
+	}	
+	s = charToint[ans[0]%B] + s;
+	if(ans[0] >= B) {
+		s = charToint[ans[0]/B] + s;
+	} 
+	cout << s << endl;
+}
+
+int main(){
+	int i;
+	scanf("%d", &N);
+	for(i = 0; i < N; i++){
+	  solution();
+	}
+	return 0;
+}

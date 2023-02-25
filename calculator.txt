@@ -1,0 +1,105 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <cstring>
+using namespace std;
+
+int N;//the number of test cases
+int B;//number system
+char S[110];//first integer
+char D[110];//second integer
+char character[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+void InputData()
+{
+	cin >> B >> S >> D;
+}
+int converttodecimal(char parameter)
+{
+    if (parameter <= '9') {
+        return (int)(parameter - '0'); 
+    }
+    return (int)(parameter - 'A' + 10);  
+}
+char converttohexa(int value) 
+{
+	return character[value];
+}
+string total(vector<int> Svector, vector<int> Dvector, int coefficient)
+{
+  string answer = "";  
+	int sizeVectorS = Svector.size();
+	int sizeVectorD = Dvector.size();
+	int length = sizeVectorS + sizeVectorD - 2;
+	int result[length + 1] = {};
+	for(int i = 0; i < sizeVectorD; i++) 
+	{
+			for(int j = 0; j < sizeVectorS; j++)
+			{
+				result[length - (i + j)] += Dvector[i] * Svector[j];		
+			}
+	}
+	char value = converttohexa(result[0]%coefficient);
+	answer = value + answer;
+	int temp = result[0]/coefficient;
+	for(int m = 1 ; m <= length; m++)
+	{
+		result[m] += temp;
+		char tempvalue =  converttohexa(result[m]%coefficient);
+		answer = tempvalue + answer;
+		temp = result[m]/coefficient;
+		while(m == length && temp > 0) 
+		{
+			int temp1 = temp%coefficient;
+			temp = temp/coefficient;
+			answer = converttohexa(temp1) + answer;
+		}
+	}
+	return answer;
+}
+
+void calculator()
+{   
+    int signedvalue = 1;
+    int parameterS = 0 , parameterD = 0;
+    if(S[parameterS] == '0' || D[parameterD] == '0')
+		{
+			cout << '0' << endl;
+			return  ;
+		}
+	  if(S[parameterS] == '-') 
+    {
+        signedvalue *= -1;
+        parameterS++;
+    }
+    if(D[parameterD] == '-')
+    {
+        signedvalue *= -1;
+        parameterD++;
+    }
+    int lengthS = strlen(S) ;
+    int lengthD = strlen(D) ;
+    vector<int> Svector ;
+    vector<int> Dvector ;
+    for(;parameterS < lengthS;parameterS++) {
+        int decimalvalue = converttodecimal(S[parameterS]);
+        Svector.push_back(decimalvalue);
+    }
+    for(;parameterD < lengthD;parameterD++) {
+        int decimalvalue = converttodecimal(D[parameterD]);
+        Dvector.push_back(decimalvalue);
+    }
+		string answer = total(Svector,Dvector,B);
+		if(signedvalue < 0) {
+			answer = "-" + answer;
+		}
+		cout << answer << endl;
+}
+int main(){
+	int i;
+	cin >> N;
+	for(i = 0; i < N; i++){
+		InputData();
+	  calculator();
+	}
+	return 0;
+}

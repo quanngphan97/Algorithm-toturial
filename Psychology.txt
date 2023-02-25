@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int N;//The number of candidates
+int A[100000 + 10];//Temperament value
+
+void InputData(){
+    cin >> N;
+    for (int i = 0; i < N; i++) cin >> A[i];
+}
+
+void solution()
+{
+	int minIndex,maxIndex;
+	int i,j;
+	i = 0, j = N - 1;
+	int sum = INT_MAX;
+	while(i < j) {
+		if(sum > abs(A[i] + A[j])) {
+			sum = abs(A[i] + A[j]);
+			minIndex = i;
+			maxIndex = j;
+		}
+		if(abs(A[i]) >= abs(A[j])) {
+			i++;
+		} else {
+			j--;
+		}
+	}
+	cout << minIndex << " " << maxIndex;
+}
+int main(){
+    InputData();
+		solution();
+    return 0;
+}

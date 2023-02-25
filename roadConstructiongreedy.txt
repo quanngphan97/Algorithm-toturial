@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int N;//Map Size
+char character[110][110];//Map information
+int arr[110][110];
+int dist[110][110];
+bool visited[110][110];
+
+void input_Data(){
+	cin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		cin >> character[i];
+		for(int j = 0; j < strlen(character[i]); j++)
+		{
+			arr[i][j] = int(character[i][j] - '0');
+		}
+	}
+}
+
+void init()
+{
+	for(int i = 0; i < N; i++)
+	{
+		for(int j = 0; j < N; j++)
+		{
+			dist[i][j] = INT_MAX;
+			visited[i][j] = false;
+		}
+	}
+}
+
+bool find(int &minX, int &minY)
+{
+	int ans = INT_MAX;
+	for(int i = 0; i < N; i++)
+	{
+		for(int j = 0; j < N; j++)
+		{
+			if(!visited[i][j] && dist[i][j] < ans) {
+				ans = dist[i][j];
+				minX = i;
+				minY = j;
+			}
+		}
+	}
+	return ans != INT_MAX;
+}
+
+void updateValue(int minX,int minY)
+{
+	int r[] = {0, -1,  0, 1};
+	int c[] = {1,  0, -1, 0};
+	for(int i = 0; i < 4; i++) {
+		int x = minX + r[i];
+		int y = minY + c[i];
+		if(x < 0 || x == N) continue;
+		if(y < 0 || y == N) continue;
+		if(!visited[x][y] && dist[x][y] > dist[minX][minY] + arr[x][y])
+			dist[x][y] = dist[minX][minY] + arr[x][y];
+	}
+}
+
+void output_Data()
+{
+	dist[0][0] = 0;
+	while(true)
+	{
+		int minX,minY;
+		if(!find(minX,minY) || (minX == N-1 && minY == N-1))
+		{
+			cout << dist[minX][minY] << endl; 
+			return ;
+		}
+		visited[minX][minY] = true;
+		updateValue(minX,minY);
+	}
+}
+
+int main() {
+	input_Data();
+	init();
+	output_Data();
+	return 0;
+}

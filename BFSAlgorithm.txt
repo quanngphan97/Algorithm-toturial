@@ -1,0 +1,63 @@
+// Example program
+#include <bits/stdc++.h>
+using namespace std;
+typedef struct {
+  int parent = -1;
+  int visit = 0;
+  int stt = INT_MAX;
+} Graph;
+
+vector <Graph> BFS(vector<vector<int>> arr , int g ) {
+    queue<int> q;
+    vector<Graph> arr1(arr.size()) ;
+    
+    q.push(g);
+    arr1[g].visit = 1;
+    arr1[g].stt = 0;
+    
+    while(!q.empty()) {
+        int s = q.front();
+        for(auto &si :arr[s] ) {
+            if( arr1[si].visit == 0 ) {
+                q.push(si);
+                arr1[si].visit = 1;
+                arr1[si].parent = s;
+                arr1[si].stt = arr1[s].stt + 1;
+            }    
+        }
+        arr1[s].visit = 2;
+        q.pop();
+    }
+    return arr1;    
+}
+int main()
+{
+  int n;
+  cout << "nhap so canh n" << endl;
+  cin >> n;
+  vector<vector<int>>arr(n);
+  for(int i = 0; i <n ; i++) {
+    int m;
+    cin >>m;
+    for(int j = 0 ; j < m; j++) {
+        int value;
+        cin >> value;
+        arr[i].push_back(value);
+    }
+  }
+  vector <Graph> res = BFS(arr, 0);
+
+    for (int i = 0; i < n; i++) {
+        cout << i << " ";
+    }
+    cout << endl;
+    for (auto &s : res) {
+        cout << s.stt << " ";
+    }
+    cout << endl;
+    for (auto &s : res) {
+        cout << s.parent << " ";
+    }
+    cout << endl;
+    return 0;
+}
