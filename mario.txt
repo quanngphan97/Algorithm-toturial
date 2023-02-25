@@ -1,0 +1,38 @@
+#include <iostream>
+#include <climits>
+using namespace std;
+
+int N;//Number of mushrooms
+int P[150000 + 10];//Mushroom value
+
+void InputData(){
+	cin >> N;
+	for (int i = 0; i < N; i++){
+		cin >> P[i];
+	}
+}
+int solution()
+{
+	int result = 0;
+	int temp_value = 0;
+	int i = 0;
+	while(i < N) {
+		while(temp_value <= P[i]) {
+			temp_value = P[i];
+			i++;
+		}
+		result += temp_value;
+		while(temp_value > P[i]) {
+			temp_value = P[i];
+			i++;
+		}
+		result -= temp_value;
+	}
+	return result;
+}
+int main(){
+
+	InputData();			//	Input function
+	cout << solution() << endl;
+	return 0;
+}

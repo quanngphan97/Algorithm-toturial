@@ -1,0 +1,70 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+int N; // Number of executable code data
+int M; // Number of virus data
+int A[20000 + 10]; // Executable code data
+int B[10 + 10]; // Virus data
+
+int sol; // Correct answer
+
+void InputData(void)
+{
+	int i;
+
+	cin >> N >> M;
+
+	for (i = 0; i < N; i++) {
+		cin >> A[i];
+	}
+
+	for (i = 0; i < M; i++) {
+		cin >> B[i];
+	}	
+	sort(B,B+M);
+}
+
+void OutputData(void)
+{
+	cout << sol;
+}
+
+int Find(int start)
+{
+	int TempArr[M];
+	for(int j = 0; j < M; j++) {
+		TempArr[j] = A[start + j];
+	}
+	sort(TempArr,TempArr + M);
+	if(M > 1) {
+		int temp = B[1] - B[0];
+		if(TempArr[0] != B[0] && (TempArr[1] - TempArr[0]) != temp) return 0;
+		for(int i = 1 ; i < M; i++) {
+			temp = B[i] - B[i-1];
+			if(TempArr[i] != B[i] && (TempArr[i] - TempArr[i - 1] != temp)) return 0;	
+		}
+		return 1;
+	}else {
+		return 1;
+	}
+}
+
+void Solve(void)
+{
+	int i;
+	for (i = 0; i <= N - M; i++) {
+		sol += Find(i);
+	}
+}
+
+int main(void)
+{
+	InputData(); // Input
+
+	Solve(); // Problem solving
+
+	OutputData(); // Output
+
+	return 0;
+}

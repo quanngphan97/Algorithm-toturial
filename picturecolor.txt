@@ -1,0 +1,55 @@
+#include <iostream>
+using namespace std;
+const int MAX = 10;
+int N,cnt;
+int Arr[MAX][MAX];
+char input[100];
+bool valid[MAX];
+
+int main() {
+	cin >> N;
+	for(int i = 0 ; i < N ; ++i) {
+		cin >> input;
+		for(int j = 0 ;j < N; ++j)
+			Arr[i][j] = int(input[j] - '0');
+	}
+	
+		//Nhap mau color picker 
+	for(int color = 1; color <= 9 ; ++color) {
+		valid[color] = true;
+	}
+	
+	
+	// xet khoang rong cua color picker
+	for(int color = 1 ; color <= 9 ; ++color) {
+		int minX = N, minY = N, maxX = -1, maxY = -1;
+		for(int j = 0 ; j < N ; ++j) {
+			for(int k = 0; k < N; ++k) {
+				if(Arr[j][k] == color) {
+					if(j > maxX) maxX = j;
+					if(j < minX) minX = j;
+					if(k > maxY) maxY = k;
+					if(k < minY) minY = k;
+				}	
+			}
+		}
+		if(maxX == - 1) 
+		{
+			valid[color] = false;
+			continue;
+		}
+		for(int m = minX ; m <= maxX ; ++m) {
+			for(int n = minY ; n <= maxY ; ++n) {
+				if(Arr[m][n] != color) {
+					valid[Arr[m][n]] = false;
+				}
+			}
+		}
+	}
+	cnt = 0;
+	for(int color = 1 ; color <= 9 ; ++color){
+		if(valid[color]) cnt++ ;
+	}
+	cout << cnt << endl;
+	return 0;
+}
